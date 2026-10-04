@@ -1,0 +1,250 @@
+/* ============================================================
+   阅读材料库 — SPA chrome + component styles (manatee style)
+   Loaded AFTER the per-view page-style pair, so these rules win
+   ties. Per-view files keep their original look; this file fixes
+   layout for the persistent <body> > .navigatebar chrome and adds
+   the SPA-only components (doc tabs, reader footer, ...).
+   Palette per manatee-blog-style: green #57BF7D / hover #73BC83,
+   muted #666-#AAA, borders #DDD/#EEE/#EFEFEF. No cards.
+   ============================================================ */
+
+/* Per-view css files set body to flex to center their content.
+   The SPA keeps a persistent chrome in <body>, so body must be block. */
+body {
+    display: block;
+}
+
+/* Home: home.css assumes body is a flex container and its .content column
+   (width:100% + 20% padding) is centered by flex shrink. With the SPA's
+   block body that shrink never happens, so the column runs 140% wide and
+   overflows the window. Reproduce the original rendered 60vw column. */
+@media screen and (min-width: 600px) {
+    .content {
+        box-sizing: border-box;
+    }
+}
+
+/* Desktop: align the persistent nav with the 20% content column
+   (same recipe as post.css body.post-page .navigatebar). */
+@media screen and (min-width: 600px) {
+    body > .navigatebar {
+        width: 100%;
+        box-sizing: border-box;
+        position: static;
+        padding-left: 20%;
+        padding-right: 20%;
+    }
+}
+
+/* Mobile: navigatebar_mobile.css already makes the nav full-width;
+   nudge it to the 10px content padding of home_mobile.css. */
+@media screen and (max-width: 600px) {
+    body > .navigatebar {
+        box-sizing: border-box;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+/* Loading splash (removed by app.js once chrome is up). */
+.app-loading {
+    padding: 120px 20px;
+    text-align: center;
+    color: #AAA;
+    font-size: 20px;
+    font-family: jinkaiFont;
+}
+
+/* ---------------- blogs / tags views ---------------- */
+
+/* tags.css centered .tag-box via body flex; with block body we align
+   the archive column to the same 20% column as home/nav. */
+@media screen and (min-width: 600px) {
+    body > .tag-box {
+        box-sizing: border-box;
+        width: 100%;
+        padding-left: 20%;
+        padding-right: 20%;
+    }
+}
+
+/* tags.css makes .tag-box a row flex (original tags.html had only
+   #archives in-flow; .categories-area is absolute). The SPA adds the
+   pager as another in-flow child, which the row layout squeezes beside
+   #archives. Stack children vertically so the pager sits centered under
+   the list, like on home. */
+body > .tag-box {
+    display: block;
+}
+
+@media screen and (max-width: 600px) {
+    body > .tag-box {
+        box-sizing: border-box;
+        width: 100%;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+.archive-date {
+    color: #AAA;
+    font-size: 15px;
+    margin-left: 12px;
+    white-space: nowrap;
+}
+
+.blog-meta {
+    color: #AAA;
+    font-size: 16px;
+    margin: -10px 0 10px 20px;
+}
+
+.blog-back {
+    display: inline-block;
+    color: #999;
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-decoration: none;
+}
+
+.blog-back:hover {
+    color: #73BC83;
+}
+
+/* ---------------- about view ---------------- */
+
+/* about.css centered .about via body flex; keep it centered. */
+.about {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ---------------- post view ---------------- */
+
+/* post.css centered .post-layout via body flex; keep it centered. */
+.post-layout {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Document tabs (原文 / 中文版 / 总结) — flat, manatee grays + green. */
+.doc-tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    margin: 4px 0 28px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #EFEFEF;
+}
+
+.doc-tab {
+    color: #999;
+    font-size: 18px;
+    font-family: jinkaiFont;
+    cursor: pointer;
+    user-select: none;
+}
+
+.doc-tab:hover {
+    color: #73BC83;
+}
+
+.doc-tab.active {
+    color: #57BF7D;
+}
+
+/* ---------------- pager (home / summaries) ---------------- */
+
+.pager {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 30px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #DDD;
+    font-size: 20px;
+}
+
+.pager-btn,
+.pager-num {
+    color: #888;
+    text-decoration: none;
+    padding: 7px 16px;
+    border-radius: 5px;
+}
+
+a.pager-btn:hover,
+a.pager-num:hover {
+    color: #73BC83;
+}
+
+.pager-num.cur {
+    color: #57BF7D;
+    font-weight: bold;
+}
+
+.pager-btn.off {
+    color: #DDD;
+}
+
+.pager-ellipsis {
+    color: #AAA;
+    padding: 7px 4px;
+}
+
+/* ---------------- chrome: nav font + site title under nav ---------------- */
+
+/* nav links use the body font instead of the script font */
+.topbar-button,
+.navigatebar-button {
+    font-family: jinkaiFont;
+    font-size: 20px;
+}
+
+@media screen and (max-width: 600px) {
+    .topbar-button,
+    .navigatebar-button {
+        font-size: 15px;
+    }
+}
+
+/* site title under the nav; home.css styles .slogan only on the home
+   page, so other page pairs get the same treatment here */
+.slogan a {
+    color: inherit;
+    text-decoration: none;
+}
+
+body > .slogan {
+    font-size: 26px;
+    text-align: center;
+    color: #666;
+    margin: 0 0 40px;
+}
+
+@media screen and (max-width: 600px) {
+    body > .slogan {
+        font-size: 16px;
+        color: #B4B4B4;
+        margin: 0 0 24px;
+    }
+}
+
+/* counter line on the tags-pair page (home.css only styles it for home) */
+#archives .char-total-counter {
+    justify-content: flex-start;
+    color: #AAA;
+    margin-bottom: 10px;
+}
+
+/* ---------------- search highlight ---------------- */
+
+mark {
+    background-color: rgba(87, 191, 125, 0.28);
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 1px;
+}
